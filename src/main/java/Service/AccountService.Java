@@ -1,7 +1,8 @@
+
 package Service;
 
 public class AccountService{
-    private AccountDAO accountDAO;
+    public AccountDAO accountDAO;
 
     public AccountService(){
         accountDAO = new AccountDAO();
