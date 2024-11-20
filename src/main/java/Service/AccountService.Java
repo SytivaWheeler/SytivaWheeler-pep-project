@@ -1,7 +1,5 @@
 package Service;
 
-import Model.Account;
-
 public class AccountService{
     private AccountDAO accountDAO;
 

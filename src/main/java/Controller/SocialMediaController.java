@@ -9,7 +9,7 @@ import io.javalin.http.Context;
 import Model.Account;
 import Model.Message;
 
-import Service.AccountService;
+//import Service.AccountService;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -17,7 +17,7 @@ import Service.AccountService;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
-    AccountService accountService;
+    //AccountService accountService;
     //MessageService messageService;
 
     /**
@@ -27,10 +27,13 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        app.get("/", this::exampleHandler);
+        app.get("/sample", this::exampleHandler);
         app.post("/account", this::postAccountHandler);
         app.post("/login", this::postLoginHandler);
-
+        app.post("/messages", this::postMessageHandler);
+        app.get("/messages", this::getAllMessagesHandler);
+        app.post("/messages/user", this::getMessageByIDHandler);
+        
         return app;
     }
 
@@ -49,19 +52,19 @@ public class SocialMediaController {
 
     }
 
-    private void postLoginHandler() throws JsonProcessingException{
+    private void postLoginHandler(Context ctx) throws JsonProcessingException{
 
     }
 
-    private void postMessageHandler(){
+    private void postMessageHandler(Context ctx){
 
     }
 
-    private void getAllMessagesHandler(){
+    private void getAllMessagesHandler(Context ctx){
 
     }
 
-    private void getMessageByID(){
+    private void getMessageByIDHandler(Context ctx){
 
     }
 
