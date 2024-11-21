@@ -1,5 +1,15 @@
-public class AccountDAO {
+package DAO;
 
+import Util.ConnectionUtil;
+import Model.Account;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+public class AccountDAO {
     public Account addAccount(Account account){
         Connection con = ConnectionUtil.getConnection();
 
@@ -35,6 +45,7 @@ public class AccountDAO {
 
             while(resSet.next()){
                 Account account = new Account(
+                        resSet.getInt("account_id"),
                         resSet.getString("username"),
                         resSet.getString("password"));
                 return account;
@@ -46,5 +57,4 @@ public class AccountDAO {
 
         return null;
     }
-
 }
