@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class AccountDAO {
@@ -15,7 +16,7 @@ public class AccountDAO {
 
         try{
             String sql = "INSERT INTO account (username, password) VALUES (?,?)";
-            PreparedStatement prepStmnt = con.prepareStatement(sql);
+            PreparedStatement prepStmnt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             
             prepStmnt.setString(1, account.username);
             prepStmnt.setString(2, account.password);
