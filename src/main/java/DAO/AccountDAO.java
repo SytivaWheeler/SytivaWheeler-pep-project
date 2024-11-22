@@ -10,7 +10,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
+
+
 public class AccountDAO {
+    
     public Account addAccount(Account account){
         Connection con = ConnectionUtil.getConnection();
 
@@ -56,6 +59,31 @@ public class AccountDAO {
             System.out.println(e.getMessage());
         }
 
+        return null;
+    }
+
+    public Account getAccountByUID(int account_id){
+        Connection con = ConnectionUtil.getConnection();
+
+        try{
+            String sql = "SELECT * FROM account where account_id = ?";
+            PreparedStatement prepStmnt = con.prepareStatement(sql);
+
+            prepStmnt.setInt(1, account_id);
+
+            ResultSet resSet = prepStmnt.executeQuery();
+
+            while(resSet.next()){
+                return new Account(
+                        resSet.getInt("account_id"),
+                        resSet.getString("username"),
+                        resSet.getString("password")
+                    );
+            }
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
         return null;
     }
 }

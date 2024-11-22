@@ -16,7 +16,7 @@ public class AccountService {
     }
 
     public Account addAccount(Account account){
-        if(account.username != "" && account.password.length() > 4)
+        if(account.getUsername() != "" && account.getPassword().length() > 4)
         {
             return accountDAO.addAccount(account);
         }
@@ -27,7 +27,7 @@ public class AccountService {
         Account checkedAccount = accountDAO.getAccountByUsername(account.username);
 
         if(checkedAccount != null){
-            if(checkedAccount.username.equals(account.username) && checkedAccount.password.equals(account.password)){
+            if(checkedAccount.getUsername().equals(account.username) && checkedAccount.getPassword().equals(account.password)){
                 return checkedAccount;
             }
             

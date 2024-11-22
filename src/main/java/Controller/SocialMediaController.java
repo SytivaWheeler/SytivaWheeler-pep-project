@@ -1,6 +1,9 @@
 package Controller;
 
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javalin.Javalin;
@@ -39,10 +42,10 @@ public class SocialMediaController {
         app.post("/login", this::postLoginHandler);
         app.post("/messages", this::postNewMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
-        app.get("/messages/{message_id}", this::getMessageByIDHandler);
+        app.get("/messages/{message_id}", this::getMessageByMIDHandler);
         app.delete("/messages/{message_id}", this::deleteMessageHandler);
         app.patch("/messages/{message_id}", this::updateMessageHandler);
-        app.get("/accounts/{account_id}/messages", this::getAllMessagesByUser);
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesByUID);
 
         return app;
     }
@@ -78,16 +81,25 @@ public class SocialMediaController {
         }
     }
 
-    private void postNewMessageHandler(Context ctx){
-
+    private void postNewMessageHandler(Context ctx) throws JsonMappingException, JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        Message addedMessage = msgService.addMessage(message);
+        if(addedMessage != null){
+            ctx.json(mapper.writeValueAsString(addedMessage));
+        }else{
+            ctx.status(400);
+        }
     }
 
     private void getAllMessagesHandler(Context ctx){
-
+        List<Message> allMessagesList = msgService.getAllMessages();
+        ctx.json(allMessagesList);
     }
 
-    private void getMessageByIDHandler(Context ctx){
-
+    private void getMessageByMIDHandler(Context ctx) throws JsonProcessingException{
+        Message message = msgService.getMessageByMID(ctx.pathParam("message_id"));
+        ctx.json(message);
     }
 
     private void deleteMessageHandler(Context ctx){
@@ -98,8 +110,9 @@ public class SocialMediaController {
 
     }
 
-    private void getAllMessagesByUser(Context ctx){
-
+    private void getAllMessagesByUID(Context ctx){
+        // List<Message> allMessagesByUIDList = msgService.getAllMessagesByUID();
+        // ctx.json(allMessagesByUIDList);
     }
 
     
