@@ -87,10 +87,13 @@ public class MessageDAO {
                     resSet.getLong("time_posted_epoch")
                 );
             }
+
+            if(resSet.getRow() == 0){
+                return message;
+            }
             
         }catch(SQLException e){
-            String err = e.getMessage();
-            System.out.println(err);
+            System.out.println(e.getMessage());
         }
         return message;
     }

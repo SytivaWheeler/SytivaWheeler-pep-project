@@ -44,7 +44,7 @@ public class MessageService {
         return messageDAO.getMessageByMID(message_id);
     }
 
-    public Message deletMessage(){
+    public Message deleteMessage(){
         return null;
     }
 

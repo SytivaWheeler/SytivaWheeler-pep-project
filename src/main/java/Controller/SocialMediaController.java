@@ -99,7 +99,12 @@ public class SocialMediaController {
 
     private void getMessageByMIDHandler(Context ctx) throws JsonProcessingException{
         Message message = msgService.getMessageByMID(ctx.pathParam("message_id"));
-        ctx.json(message);
+        if(message.getMessage_text() != null){
+            ctx.json(message);
+        }else{
+            ctx.json("");
+        }
+        
     }
 
     private void deleteMessageHandler(Context ctx){
