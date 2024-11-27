@@ -108,16 +108,31 @@ public class SocialMediaController {
     }
 
     private void deleteMessageHandler(Context ctx){
-
+        Message message = msgService.deleteMessage(ctx.pathParam("message_id"));
+        if(message.getMessage_text() != null){
+            ctx.json(message);
+        }else{
+            ctx.json("");
+        }
     }
 
-    private void updateMessageHandler(Context ctx){
+    private void updateMessageHandler(Context ctx) throws JsonMappingException, JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        Message newMessage = mapper.readValue(ctx.body(), Message.class);
+        Message resultMessage = msgService.updateMessage(ctx.pathParam("message_id"), newMessage);
+        if(resultMessage != null){
+            ctx.json(mapper.writeValueAsString(resultMessage));
+        }else{
+            ctx.status(400);
+        }
+
 
     }
 
     private void getAllMessagesByUID(Context ctx){
-        // List<Message> allMessagesByUIDList = msgService.getAllMessagesByUID();
-        // ctx.json(allMessagesByUIDList);
+        //TODO: Finish getmessagebyUID
+        List<Message> allMessagesByUIDList = msgService.getAllMessagesByUID(ctx.pathParam("account_id"));
+        ctx.json(allMessagesByUIDList);
     }
 
     

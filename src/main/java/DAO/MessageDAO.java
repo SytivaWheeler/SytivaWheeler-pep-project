@@ -98,25 +98,58 @@ public class MessageDAO {
         return message;
     }
 
-    public Message deleteMessage(Message message){
-        //TODO: Make a delete message method in MessageDAO
-        return message;
+    public int deleteMessage(String message_id){
+        Connection con = ConnectionUtil.getConnection();
+        int affectedRows = 0;
+
+        try{
+            String sql = "DELETE FROM message WHERE message_id = ?";
+            PreparedStatement prepStmnt = con.prepareStatement(sql);
+
+            prepStmnt.setInt(1, Integer.valueOf(message_id));
+
+            affectedRows = prepStmnt.executeUpdate();
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return affectedRows;
     }
 
-    public Message updateMessage(Message message){
-        //TODO: Make an update message method in MessageDAO
-        return message;
+    public int updateMessage(String message_id, Message newMessage){
+        Connection con = ConnectionUtil.getConnection();
+        int affectedRows = 0;
+
+        try{
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
+            PreparedStatement prepStmnt = con.prepareStatement(sql);
+
+            prepStmnt.setString(1, newMessage.getMessage_text());
+            prepStmnt.setInt(2, Integer.valueOf(message_id));
+
+            affectedRows = prepStmnt.executeUpdate();
+            
+            if(affectedRows == 0){
+                System.out.println("nothing changed....");
+            }else{
+                System.out.println(affectedRows + " row(s) affected!!!");
+            }
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return affectedRows;
     }
 
     //Gets all messages by a specific user using their user id
-    public List<Message> getAllMessagesByUID(Account account){
+    public List<Message> getAllMessagesByUID(String account_id){
         Connection con = ConnectionUtil.getConnection();
         List<Message> allMessagesID = new ArrayList<>();
         try{
             String sql = "SELECT * FROM message WHERE posted_by = ? ";
             PreparedStatement prepStmnt = con.prepareStatement(sql);
 
-            prepStmnt.setInt(1, account.getAccount_id());
+            prepStmnt.setInt(1, Integer.valueOf(account_id));
             ResultSet resSet = prepStmnt.executeQuery();
 
             while(resSet.next()){

@@ -44,11 +44,35 @@ public class MessageService {
         return messageDAO.getMessageByMID(message_id);
     }
 
-    public Message deleteMessage(){
-        return null;
+    public Message deleteMessage(String message_id){
+        Message retrievedMessage = messageDAO.getMessageByMID(message_id);
+        
+        if(retrievedMessage.getMessage_text() != null){
+            messageDAO.deleteMessage(message_id);
+        }
+        
+        return retrievedMessage;
     }
 
-    public List<Message> getAllMessagesByUID(Account account){
-        return messageDAO.getAllMessagesByUID(account);
+    public Message updateMessage(String message_id, Message newMessage){
+        Message retrievedMessage = messageDAO.getMessageByMID(message_id);
+
+        //Check if message doesnt exist and if the new message is too long or empty
+        if((retrievedMessage.getMessage_text() != null) && 
+            !(newMessage.getMessage_text().equals("")) && 
+            (newMessage.getMessage_text().length() <= 255 ))   
+        {
+            messageDAO.updateMessage(message_id, newMessage);
+            retrievedMessage = messageDAO.getMessageByMID(message_id);
+        }else{
+            retrievedMessage = null;
+        }
+
+        return retrievedMessage;
+        
+    }
+
+    public List<Message> getAllMessagesByUID(String account_id){
+        return messageDAO.getAllMessagesByUID(account_id);
     }
 }
