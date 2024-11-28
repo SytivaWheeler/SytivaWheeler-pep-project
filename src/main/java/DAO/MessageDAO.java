@@ -8,13 +8,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import Model.Account;
 import Model.Message;
 
 import Util.ConnectionUtil;
 
 public class MessageDAO {
 
+    /*
+     *  Adds the message passed to it to the DB and returns a message object
+     *  containing said message.
+     */
     public Message addMessage(Message message){
         Connection con = ConnectionUtil.getConnection();
 
@@ -37,15 +40,21 @@ public class MessageDAO {
                     message.getTime_posted_epoch()
                 );
             }
+
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+
         return null;
     }
 
+    /*
+     *  Returns a list of message objcts containing all the mesaages in the DB
+     */
     public List<Message> getAllMessages(){
         Connection con = ConnectionUtil.getConnection();
         List<Message> allMessages = new ArrayList<>();
+
         try{            
             String sql = "SELECT * FROM message";
 
@@ -64,13 +73,17 @@ public class MessageDAO {
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+
         return allMessages;
     }
 
-    //Gets messages by their message ID 
+    /*
+     * Returns a message object with a message obtained from the DB using its message id.
+    */
     public Message getMessageByMID(String message_id){
         Connection con = ConnectionUtil.getConnection();
         Message message = new Message();
+
         try{
             String sql = "SELECT * FROM message WHERE message_id = ? ";
             PreparedStatement prepStmnt = con.prepareStatement(sql);
@@ -87,17 +100,17 @@ public class MessageDAO {
                     resSet.getLong("time_posted_epoch")
                 );
             }
-
-            if(resSet.getRow() == 0){
-                return message;
-            }
             
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+
         return message;
     }
 
+    /*
+     *  Deletes a message from the DB and returns the rows affected.
+     */
     public int deleteMessage(String message_id){
         Connection con = ConnectionUtil.getConnection();
         int affectedRows = 0;
@@ -113,9 +126,13 @@ public class MessageDAO {
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+
         return affectedRows;
     }
 
+    /*
+     *  Updates a message in the DB and returns the rows affected.
+     */
     public int updateMessage(String message_id, Message newMessage){
         Connection con = ConnectionUtil.getConnection();
         int affectedRows = 0;
@@ -128,23 +145,22 @@ public class MessageDAO {
             prepStmnt.setInt(2, Integer.valueOf(message_id));
 
             affectedRows = prepStmnt.executeUpdate();
-            
-            if(affectedRows == 0){
-                System.out.println("nothing changed....");
-            }else{
-                System.out.println(affectedRows + " row(s) affected!!!");
-            }
 
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+
         return affectedRows;
     }
 
-    //Gets all messages by a specific user using their user id
+    /*
+     *  Returns a list of message objects containing all messages posted by 
+     *  a specific user using their user id.
+     */
     public List<Message> getAllMessagesByUID(String account_id){
         Connection con = ConnectionUtil.getConnection();
         List<Message> allMessagesID = new ArrayList<>();
+
         try{
             String sql = "SELECT * FROM message WHERE posted_by = ? ";
             PreparedStatement prepStmnt = con.prepareStatement(sql);
@@ -165,6 +181,7 @@ public class MessageDAO {
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+
         return allMessagesID;
     }
 }
