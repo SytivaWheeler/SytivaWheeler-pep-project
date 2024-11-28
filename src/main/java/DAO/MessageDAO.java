@@ -79,10 +79,10 @@ public class MessageDAO {
 
     /*
      * Returns a message object with a message obtained from the DB using its message id.
+     * Returns a null message object if the message is not found within the DB.
     */
     public Message getMessageByMID(String message_id){
         Connection con = ConnectionUtil.getConnection();
-        Message message = new Message();
 
         try{
             String sql = "SELECT * FROM message WHERE message_id = ? ";
@@ -93,7 +93,7 @@ public class MessageDAO {
             ResultSet resSet = prepStmnt.executeQuery();
 
             while(resSet.next()){
-                message = new Message(
+                return new Message(
                     resSet.getInt("message_id"),
                     resSet.getInt("posted_by"),
                     resSet.getString("message_text"),
@@ -105,7 +105,7 @@ public class MessageDAO {
             System.out.println(e.getMessage());
         }
 
-        return message;
+        return null;
     }
 
     /*

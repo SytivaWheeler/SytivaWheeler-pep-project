@@ -58,6 +58,9 @@ public class SocialMediaController {
         context.json("sample text");
     }
 
+    /*
+     *  Handler for registering accounts. Returns 400 status if it fails.
+     */
     private void postRegisterAccountHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
@@ -70,6 +73,9 @@ public class SocialMediaController {
 
     }
 
+    /*
+     *  Handler for logging in. Returns 401 status code if it fails
+     */
     private void postLoginHandler(Context ctx) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
@@ -81,6 +87,9 @@ public class SocialMediaController {
         }
     }
 
+    /*
+     *  Handler for posting new messages to the DB. Returns 400 status if it fails.
+     */
     private void postNewMessageHandler(Context ctx) throws JsonMappingException, JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
@@ -92,14 +101,21 @@ public class SocialMediaController {
         }
     }
 
+    /*
+     *  Handler for retrieving all messages in the DB.
+     */
     private void getAllMessagesHandler(Context ctx){
         List<Message> allMessagesList = msgService.getAllMessages();
         ctx.json(allMessagesList);
     }
 
-    private void getMessageByMIDHandler(Context ctx) throws JsonProcessingException{
+    /*
+     *  Handler for retrieving messages by their message id. Returns 
+     *  empty json if it fails. 
+     */
+    private void getMessageByMIDHandler(Context ctx){
         Message message = msgService.getMessageByMID(ctx.pathParam("message_id"));
-        if(message.getMessage_text() != null){
+        if(message != null){
             ctx.json(message);
         }else{
             ctx.json("");
@@ -107,15 +123,23 @@ public class SocialMediaController {
         
     }
 
+    /*
+     *  Handler for deleting messages from the DB. Returns 
+     *  empty json if it fails.
+     */
     private void deleteMessageHandler(Context ctx){
         Message message = msgService.deleteMessage(ctx.pathParam("message_id"));
-        if(message.getMessage_text() != null){
+        if(message != null){
             ctx.json(message);
         }else{
             ctx.json("");
         }
     }
 
+    /*
+     *  Handler for updating messages in the DB. Returns 400 status
+     *  if it fails.
+     */
     private void updateMessageHandler(Context ctx) throws JsonMappingException, JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         Message newMessage = mapper.readValue(ctx.body(), Message.class);
@@ -129,13 +153,11 @@ public class SocialMediaController {
 
     }
 
+    /*
+     *  Handler for retrieving all messages made by a specific user using their user ID.
+     */
     private void getAllMessagesByUID(Context ctx){
-        //TODO: Finish getmessagebyUID
         List<Message> allMessagesByUIDList = msgService.getAllMessagesByUID(ctx.pathParam("account_id"));
         ctx.json(allMessagesByUIDList);
     }
-
-    
-
-
 }

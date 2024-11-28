@@ -14,6 +14,10 @@ import java.sql.Statement;
 
 public class AccountDAO {
     
+    /*
+     *  Adds the passed account to the DB and returns an object containing said 
+     *  account on success, returns null account object otherwise.
+     */
     public Account addAccount(Account account){
         Connection con = ConnectionUtil.getConnection();
 
@@ -36,6 +40,11 @@ public class AccountDAO {
         return null;
     }
 
+    /*
+     *  Returns an account object containing the account info that matches 
+     *  the username passed to this method. Returns a null account object
+     *  if the username does not match the username of an account in the DB.
+     */
     public Account getAccountByUsername(String username){
         Connection con = ConnectionUtil.getConnection();
 
@@ -48,11 +57,11 @@ public class AccountDAO {
             ResultSet resSet = prepStmnt.executeQuery();
 
             while(resSet.next()){
-                Account account = new Account(
+                return new Account(
                         resSet.getInt("account_id"),
                         resSet.getString("username"),
                         resSet.getString("password"));
-                return account;
+                
             }
 
         }catch(SQLException e){
@@ -62,6 +71,11 @@ public class AccountDAO {
         return null;
     }
 
+    /*
+     *  Returns an account object containing the account retrieved
+     *  from the DB using the account id passed to it. Returns a null
+     *  account object if the id does not match an account in the DB.
+     */
     public Account getAccountByUID(int account_id){
         Connection con = ConnectionUtil.getConnection();
 

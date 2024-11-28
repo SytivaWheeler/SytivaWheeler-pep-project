@@ -19,7 +19,8 @@ public class MessageService {
     }
 
     /*
-     *  Constructor for a message service object with both account and message DAO as parameters.
+     *  Constructor for a message service object with both account DAO and 
+     *  message DAO as parameters.
      */
     public MessageService(MessageDAO messageDAO, AccountDAO accountDAO){
         this.messageDAO = messageDAO;
@@ -50,7 +51,7 @@ public class MessageService {
 
     /*
      *  Returns a message object containing the message if it existed in
-     *  the DB, returns an empty new message object otherwise.
+     *  the DB, returns a null message object otherwise.
      */
     public Message getMessageByMID(String message_id){
         return messageDAO.getMessageByMID(message_id);
@@ -63,7 +64,7 @@ public class MessageService {
     public Message deleteMessage(String message_id){
         Message retrievedMessage = messageDAO.getMessageByMID(message_id);
         
-        if(retrievedMessage.getMessage_text() != null){
+        if(retrievedMessage != null){
             messageDAO.deleteMessage(message_id);
         }
         
@@ -78,7 +79,7 @@ public class MessageService {
     public Message updateMessage(String message_id, Message newMessage){
         Message retrievedMessage = messageDAO.getMessageByMID(message_id);
 
-        if((retrievedMessage.getMessage_text() != null) && 
+        if((retrievedMessage != null) && 
             !(newMessage.getMessage_text().equals("")) && 
             (newMessage.getMessage_text().length() <= 255 ))   
         {
