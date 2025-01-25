@@ -49,7 +49,7 @@ public class MessageDAO {
     }
 
     /*
-     *  Returns a list of message objcts containing all the mesaages in the DB
+     *  Returns a list of message objects containing all the mesaages in the DB
      */
     public List<Message> getAllMessages(){
         Connection con = ConnectionUtil.getConnection();
